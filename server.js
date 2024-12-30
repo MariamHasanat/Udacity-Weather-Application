@@ -1,17 +1,17 @@
 // Setup empty JS object to act as endpoint for all routes
-let projectData = {name: "Frying-Nemo"};
+let projectData = [{name: "Frying-Nemo"}];
 
 // Require Express to run server and routes
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser');
 
 // Start up an instance of app
 const app = express();
 
 /* Middleware*/
 //Here we are configuring express to use body-parser as middle-ware.
-app.use(bodyParser.urlencoded());
+app.use(express.urlencoded());
 app.use(express.json());
 
 // Cors for cross origin allowance
@@ -23,7 +23,7 @@ app.use(express.static('website'));
 
 // Setup Server
 
-const port = 8080;
+const port = 3030;
 
 app.listen(port, () => {
     console.log(`server is running on port ${port}`);
@@ -44,7 +44,21 @@ app.get('/getData', (req, res) => {
         const data = JSON.stringify(projectData);
         console.log("Hello from server");
 
-        res.status(200).send(data)
+        res.status(200).json(data)
+    } catch (error) {
+        console.error('error happened in get response', error)
+    }
+})
+
+
+app.post('/postData', (req, res) => {
+    try {
+        const data = req.body;
+        console.log("Data received:", data);
+        projectData.push(data);
+        console.log("Updated projectData:", projectData);
+
+        res.status(200).json(projectData);
     } catch (error) {
         console.error('error happened in get response', error)
     }
