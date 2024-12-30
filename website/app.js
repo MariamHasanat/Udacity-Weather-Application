@@ -8,17 +8,13 @@ let d = new Date();
 let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear();
 
 const retrieveData = async (url) => {
-    const commingData = await fetch(url+'/getData', {
-        method: 'GET'
-    });
-    try {
-        // const response  = await commingData.json();
-        console("retrieved data: ", commingData)
-        return commingData
-    } catch (error) {
-        console.log("error in fetch the data in retrieve data function ", error)
-    }
+    await fetch(url + '/getData').then(
+        async (res) => {
+           const data = await res.json();
+           console.log(data);
+            return data
+        }
+    )
 }
 
-console.log(retrieveData(url));
- 
+retrieveData(url);
