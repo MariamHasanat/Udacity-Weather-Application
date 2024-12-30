@@ -34,6 +34,15 @@ app.get('/', (req, res) => {
     res.status(200).send("Hello from Mariam Server baad ma telet rohaa")
 })
 
+app.get('/all', (req, res) => {
+    try {
+        const data = JSON.stringify(projectData);
+        res.status(200).json(data)
+    } catch (error) {
+        console.error('error happened in get response', error)
+    }
+})
+
 app.get('/getData', (req, res) => {
     console.log(projectData);
 
@@ -49,7 +58,6 @@ app.get('/getData', (req, res) => {
         console.error('error happened in get response', error)
     }
 })
-
 
 app.post('/postData', (req, res) => {
     try {
