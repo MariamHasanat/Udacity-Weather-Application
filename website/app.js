@@ -79,16 +79,16 @@ document.getElementById('generate').addEventListener('click', async () => {
     
     await fetchWeatherData(baseUrl, zipCode, apiKey)
         .then(
-            (temp) => {
+            (temp) =>
                 postData(url, {
                     temp: temp,
                     feel: feel,
                     date: newDate
                 })
-            }
         ).then(
             () => retrieveData()
-        ).catch((error) => {
+        ).catch(
+            (error) => {
             console.log('error in fetching in generate button', error)
         })
 });
