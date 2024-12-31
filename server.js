@@ -39,7 +39,7 @@ app.get('/all', (req, res) => {
         const data = JSON.stringify(projectData);
         res.status(200).json(data)
     } catch (error) {
-        console.error('error happened in get response', error)
+        res.status(500).send({ error: 'Internal Server Error' });
     }
 })
 
@@ -68,6 +68,6 @@ app.post('/postData', (req, res) => {
 
         res.status(200).json(projectData);
     } catch (error) {
-        console.error('error happened in get response', error)
+        res.status(500).send({ error: 'Internal Server Error' });
     }
 })
