@@ -1,8 +1,9 @@
 /* Global Variables */
 
 // Personal API Key for OpenWeatherMap API
-const apiKey = '5b5c9875d7e328484f0b89d44e752635&units=imperial';
+const apiKey = '5b5c9875d7e328484f0b89d44e752635';
 const url = 'http://localhost:3030';
+// const baseUrl = 'http://api.openweathermap.org/data/2.5/weather/'
 
 // Create a new date instance dynamically with JS
 let d = new Date();
@@ -36,27 +37,51 @@ const postData = async (url, objectData) => {
     )
 }
 
-const retrieveData = async () =>{
+const retrieveData = async () => {
     const request = await fetch('/all');
     try {
-    // Transform into JSON
-    const allData = await request.json()
-    console.log(allData);
-    // Write updated data to DOM elements
-    document.getElementById('temp').innerHTML = Math.round(allData.temp)+ 'degrees';
-    document.getElementById('content').innerHTML = allData.feel;
-    document.getElementById('date').innerHTML =allData.date;
+        // Transform into JSON
+        const allData = await request.json()
+        console.log(allData);
+        // Write updated data to DOM elements
+        document.getElementById('temp').innerHTML = Math.round(allData.temp) + 'degrees';
+        document.getElementById('content').innerHTML = allData.feel;
+        document.getElementById('date').innerHTML = allData.date;
     }
-    catch(error) {
-      console.log('error', error);
-      // appropriately handle the error
+    catch (error) {
+        console.log('error', error);
+        // appropriately handle the error
     }
-   }
-   
+}
 
-// retrieveData(url);
+
+const baseUrl = 'http://api.openweathermap.org/data/2.5/weather';
+let zipCode = '';
+const zipCodeEvent = document.getElementById('zip').addEventListener('input', (e) => { 
+    console.log(e.target.value); 
+    zipCode = e.target.value;
+    console.log('zipCode = ', zipCode);
+    
+});
+
+
+
+const fetchWeatherData = async (baseUrl, zipCode, apiKey) => {
+    const urlWeather = `${baseUrl}?zip=${zipCode}&appid=${apiKey}&units=imperial`; // Append your parameters
+
+    const response = await fetch(urlWeather);
+    try {
+        const weatherData = await response.json();
+        console.log(weatherData);
+        // return weatherData;
+
+    } catch (error) {
+        console.log('error in fetching weather data', error);
+
+    }
+}
 
 // postData(url, sentData);
-const sentData = {name:'Frying-Neno'};
+const sentData = { name: 'Frying-Neno' };
 
-document.getElementById('generate').addEventListener('click', postData(url, sentData));
+document.getElementById('generate').addEventListener('click', () => fetchWeatherData(baseUrl, zipCode, apiKey));
