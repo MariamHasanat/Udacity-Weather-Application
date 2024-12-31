@@ -3,11 +3,19 @@
 // Personal API Key for OpenWeatherMap API
 const apiKey = '5b5c9875d7e328484f0b89d44e752635';
 const url = 'http://localhost:3030';
-// const baseUrl = 'http://api.openweathermap.org/data/2.5/weather/'
 
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear();
+let newDate = (d.getMonth()+1) + '.' + d.getDate() + '.' + d.getFullYear();
+const baseUrl = 'http://api.openweathermap.org/data/2.5/weather';
+let zipCode = '';
+const zipCodeEvent = document.getElementById('zip').addEventListener('input', (e) => { 
+    console.log(e.target.value); 
+    zipCode = e.target.value;
+    console.log('zipCode = ', zipCode);
+    
+});
+
 
 const getData = async (url) => {
     await fetch(url + '/getData').then(
@@ -18,7 +26,6 @@ const getData = async (url) => {
         }
     )
 }
-
 
 const postData = async (url, objectData) => {
     await fetch(url + '/postData', {
@@ -54,18 +61,6 @@ const retrieveData = async () => {
     }
 }
 
-
-const baseUrl = 'http://api.openweathermap.org/data/2.5/weather';
-let zipCode = '';
-const zipCodeEvent = document.getElementById('zip').addEventListener('input', (e) => { 
-    console.log(e.target.value); 
-    zipCode = e.target.value;
-    console.log('zipCode = ', zipCode);
-    
-});
-
-
-
 const fetchWeatherData = async (baseUrl, zipCode, apiKey) => {
     const urlWeather = `${baseUrl}?zip=${zipCode}&appid=${apiKey}&units=imperial`; // Append your parameters
 
@@ -80,8 +75,5 @@ const fetchWeatherData = async (baseUrl, zipCode, apiKey) => {
 
     }
 }
-
-// postData(url, sentData);
-const sentData = { name: 'Frying-Neno' };
 
 document.getElementById('generate').addEventListener('click', () => fetchWeatherData(baseUrl, zipCode, apiKey));
