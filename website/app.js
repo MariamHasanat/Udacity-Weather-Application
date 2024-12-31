@@ -6,14 +6,22 @@ const url = 'http://localhost:3030';
 
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = (d.getMonth()+1) + '.' + d.getDate() + '.' + d.getFullYear();
+let newDate = (d.getMonth() + 1) + '.' + d.getDate() + '.' + d.getFullYear();
 const baseUrl = 'http://api.openweathermap.org/data/2.5/weather';
 let zipCode = '';
-const zipCodeEvent = document.getElementById('zip').addEventListener('input', (e) => { 
-    console.log(e.target.value); 
+const zipCodeEvent = document.getElementById('zip').addEventListener('input', (e) => {
+    console.log(e.target.value);
     zipCode = e.target.value;
     console.log('zipCode = ', zipCode);
-    
+
+});
+
+let userFeelings = '';
+const userFeelingInputs = document.getElementById('feelings').addEventListener('input', (e) => {
+    console.log(e.target.value);
+    userFeelings = e.target.value;
+    console.log('userFeelings = ', userFeelings);
+
 });
 
 
@@ -45,10 +53,11 @@ const postData = async (url, objectData) => {
 }
 
 const retrieveData = async () => {
-    const request = await fetch('/all');
+    const request = await fetch(url + '/all');
     try {
         // Transform into JSON
-        const allData = await request.json()
+        let allData = await request.json();
+        allData = JSON.parse(allData);
         console.log(allData);
         // Write updated data to DOM elements
         document.getElementById('temp').innerHTML = Math.round(allData.temp) + 'degrees';
@@ -61,14 +70,17 @@ const retrieveData = async () => {
     }
 }
 
+let weatherComingData = '';
+let temp = '';
+
 const fetchWeatherData = async (baseUrl, zipCode, apiKey) => {
     const urlWeather = `${baseUrl}?zip=${zipCode}&appid=${apiKey}&units=imperial`; // Append your parameters
 
     const response = await fetch(urlWeather);
     try {
         const weatherData = await response.json();
-        console.log(weatherData);
-        // return weatherData;
+        temp = weatherData.main.temp;
+        return temp;
 
     } catch (error) {
         console.log('error in fetching weather data', error);
@@ -76,4 +88,15 @@ const fetchWeatherData = async (baseUrl, zipCode, apiKey) => {
     }
 }
 
-document.getElementById('generate').addEventListener('click', () => fetchWeatherData(baseUrl, zipCode, apiKey));
+document.getElementById('generate').addEventListener('click', async() => { 
+    await fetchWeatherData(baseUrl, zipCode, apiKey)
+    .then(
+        (temp)=>{
+            postData(url, {
+                temp: temp,
+                feel: userFeelings,
+                date: newDate
+            })
+        }
+    ).then(()=> retrieveData())
+});

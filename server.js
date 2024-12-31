@@ -1,5 +1,5 @@
 // Setup empty JS object to act as endpoint for all routes
-let projectData = [{name: "Frying-Nemo"}];
+let projectData = {};
 
 // Require Express to run server and routes
 const express = require('express');
@@ -63,7 +63,7 @@ app.post('/postData', (req, res) => {
     try {
         const data = req.body;
         console.log("Data received:", data);
-        projectData.push(data);
+        projectData = { ...projectData, ...data };
         console.log("Updated projectData:", projectData);
 
         res.status(200).json(projectData);
