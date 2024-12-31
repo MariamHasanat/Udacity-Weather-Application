@@ -19,17 +19,6 @@ const userFeelingInputs = document.getElementById('feelings').addEventListener('
 });
 
 
-const getData = async (url) => {
-    await fetch(url + '/getData').then(
-        async (res) => {
-            const data = await res.json();
-            return data
-        }
-    ).catch((error) => {
-        console.log('error in get data function', error);
-    })
-}
-
 const postData = async (url, objectData) => {
     await fetch(url + '/postData', {
         method: 'POST',
