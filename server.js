@@ -41,22 +41,6 @@ app.get('/all', (req, res) => {
     }
 })
 
-app.get('/getData', (req, res) => {
-    console.log(projectData);
-
-    try {
-        // const comingData = JSON.parse(req.body);
-        // projectData = {...projectData, comingData}
-        // console.log(projectData);
-        const data = JSON.stringify(projectData);
-        console.log("Hello from server");
-
-        res.status(200).json(data)
-    } catch (error) {
-        console.error('error happened in get response', error)
-    }
-})
-
 app.post('/postData', (req, res) => {
     try {
         const data = req.body;
