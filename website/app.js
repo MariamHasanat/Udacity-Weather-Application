@@ -9,13 +9,13 @@ let d = new Date();
 let newDate = (d.getMonth() + 1) + '.' + d.getDate() + '.' + d.getFullYear();
 const baseUrl = 'http://api.openweathermap.org/data/2.5/weather';
 let zipCode = '';
+let feel = '';
 const zipCodeEvent = document.getElementById('zip').addEventListener('input', (e) => {
     zipCode = e.target.value;
 });
 
-let userFeelings = '';
 const userFeelingInputs = document.getElementById('feelings').addEventListener('input', (e) => {
-    userFeelings = e.target.value;
+    feel = e.target.value;
 });
 
 
@@ -55,9 +55,9 @@ const retrieveData = async () => {
         let allData = await request.json();
 
         // Write updated data to DOM elements
-        document.getElementById('temp').innerHTML = 'The temperature: ' + Math.round(allData.temp) + 'degrees';
-        document.getElementById('content').innerHTML = "The user feelings: " + allData.feel;
-        document.getElementById('date').innerHTML = 'The date: ' + allData.date;
+        document.getElementById('temp').innerHTML = 'Temperature: ' + Math.round(allData.temp) + ' °F';
+        document.getElementById('content').innerHTML = "Feelings: " + allData.feel;
+        document.getElementById('date').innerHTML = 'Date: ' + allData.date;
     }
     catch (error) {
         console.log('error', error);
@@ -65,16 +65,13 @@ const retrieveData = async () => {
     }
 }
 
-let weatherComingData = '';
-let temp = '';
-
 const fetchWeatherData = async (baseUrl, zipCode, apiKey) => {
     const urlWeather = `${baseUrl}?zip=${zipCode}&appid=${apiKey}&units=imperial`; // Append your parameters
-
     const response = await fetch(urlWeather);
+
     try {
         const weatherData = await response.json();
-        temp = weatherData.main.temp;
+        const temp = weatherData.main.temp;
         return temp;
 
     } catch (error) {
@@ -84,24 +81,25 @@ const fetchWeatherData = async (baseUrl, zipCode, apiKey) => {
 }
 
 document.getElementById('generate').addEventListener('click', async () => {
-    if (!zipCode || !userFeelings) {
+    if (!zipCode || !feel) {
         alert('Enter Zip code and User feelings!');
         return
     }
-
+    document.getElementById('zip').value = '';
+    document.getElementById('feelings').value = '';
+    
     await fetchWeatherData(baseUrl, zipCode, apiKey)
         .then(
             (temp) => {
                 postData(url, {
                     temp: temp,
-                    feel: userFeelings,
+                    feel: feel,
                     date: newDate
                 })
             }
         ).then(
             () => retrieveData()
-        )
-        .catch((err) => {
+        ).catch((error) => {
             console.log('error in fetching in generate button', error)
         })
 });
