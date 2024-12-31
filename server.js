@@ -4,7 +4,6 @@ let projectData = {};
 // Require Express to run server and routes
 const express = require('express');
 const cors = require('cors');
-// const bodyParser = require('body-parser');
 
 // Start up an instance of app
 const app = express();
@@ -36,8 +35,7 @@ app.get('/', (req, res) => {
 
 app.get('/all', (req, res) => {
     try {
-        const data = JSON.stringify(projectData);
-        res.status(200).json(data)
+        res.status(200).json(projectData);
     } catch (error) {
         res.status(500).send({ error: 'Internal Server Error' });
     }
@@ -62,10 +60,7 @@ app.get('/getData', (req, res) => {
 app.post('/postData', (req, res) => {
     try {
         const data = req.body;
-        console.log("Data received:", data);
         projectData = { ...projectData, ...data };
-        console.log("Updated projectData:", projectData);
-
         res.status(200).json(projectData);
     } catch (error) {
         res.status(500).send({ error: 'Internal Server Error' });

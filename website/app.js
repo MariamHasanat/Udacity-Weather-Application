@@ -53,7 +53,6 @@ const retrieveData = async () => {
     try {
         // Transform into JSON
         let allData = await request.json();
-        allData = JSON.parse(allData);
 
         // Write updated data to DOM elements
         document.getElementById('temp').innerHTML = 'The temperature: ' + Math.round(allData.temp) + 'degrees';
